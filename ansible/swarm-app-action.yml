@@ -1,5 +1,5 @@
 ---
-- hosts: tag_Name_ec2_swarm_01
+- hosts: tag_Role_SwarmManager
   become: yes
   tasks:
     - shell: "{{ swarm_action }}"

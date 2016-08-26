@@ -9,7 +9,7 @@ import (
 
 func handler(w http.ResponseWriter, r *http.Request) {
         h, _ := os.Hostname()
-        fmt.Fprintf(w, "Hello v0.5, I am running on container %s", h)
+        fmt.Fprintf(w, "Hello v0.6, I am running on container %s", h)
 	fmt.Fprintf(w, ". I love %s!\n", r.URL.Path[1:])
 }
 

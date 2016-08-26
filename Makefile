@@ -3,7 +3,7 @@ export TF_VAR_aws_ssh_pub_key=$(shell cat ~/.ssh/swarm.pub)
 
 # App specific and release version set
 export myapp_image=mstuparu/myapp
-export myapp_vers=0.5
+export myapp_vers=0.6
 
 swarm_create_app="docker service create --name myapp --replicas 5 --update-delay 5s --publish 80:8080 ${myapp_image}:${myapp_vers}"
 swarm_update_app="docker service update --image ${myapp_image}:${myapp_vers} myapp"
