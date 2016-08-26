@@ -1,11 +1,7 @@
 version: "2"
 
-networks:
-  myapp:
-    driver: overlay
-
 services:
   myapp:
-    image: mstuparu/myapp
-    networks:
-      - myapp
+    image: mstuparu/myapp:${myapp_vers}
+    ports:
+      - "80:8080"

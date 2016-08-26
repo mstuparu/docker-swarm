@@ -8,7 +8,7 @@
     changed_when: false
   
   - name: Grab swarm manager token from master 
-    shell: docker swarm join-token --quiet {{ swarm_role | default('worker') }}
+    shell: docker swarm join-token --quiet {{ swarm_role | default('manager') }}
     register: result 
     changed_when: false
   
