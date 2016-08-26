@@ -1,0 +1,29 @@
+---
+- block: 
+  - name: Init swarm on the first node 
+    shell: |
+      if [ $(docker info | grep -c 'Swarm: active') -eq 0 ]; then
+          docker swarm init
+      fi
+    changed_when: false
+  
+  - name: Grab swarm manager token from master 
+    shell: docker swarm join-token --quiet {{ swarm_role | default('worker') }}
+    register: result 
+    changed_when: false
+  
+  - name: Set swarm manager token in facts
+    set_fact:
+      swarm_manager_token: "{{ result.stdout }}"
+    changed_when: false
+  when: "'tag_Name_ec2_swarm_01' in group_names"
+
+- pause: seconds=3
+
+- name: Join swarm initated on the first node
+  shell: |
+    if [ $(docker info | grep -c 'Swarm: active') -eq 0 ]; then
+      docker swarm join --token {{ hostvars[groups['tag_Name_ec2_swarm_01'][0]]['swarm_manager_token'] }}  {{ hostvars[groups['tag_Name_ec2_swarm_01'][0]]['ec2_private_ip_address'] }}
+    fi
+  when: "'tag_Name_ec2_swarm_01' not in group_names"
+  changed_when: false

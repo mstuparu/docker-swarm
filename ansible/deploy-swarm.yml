@@ -1,0 +1,27 @@
+---
+- hosts: tag_Role_SwarmManager
+  gather_facts: no
+  connection: local
+  tasks:
+    - wait_for: port=22 host="{{ ansible_ssh_host }}" search_regex=OpenSSH timeout=500 state=present
+    - pause: seconds=5
+
+- hosts: tag_Role_SwarmManager
+  become: yes
+  roles:
+    - docker
+  tasks:
+    - name: Setup weave
+      get_url: url=https://git.io/scope dest=/usr/local/bin/scope
+      become: yes
+    - file: path=/usr/local/bin/scope mode="a+x"
+      become: yes
+    - shell: |
+        /usr/local/bin/scope stop
+        /usr/local/bin/scope launch {{ hostvars[groups['tag_Name_ec2_swarm_01'][0]]['ec2_private_ip_address'] }} {{ hostvars[groups['tag_Name_ec2_swarm_02'][0]]['ec2_private_ip_address'] }} {{ hostvars[groups['tag_Name_ec2_swarm_03'][0]]['ec2_private_ip_address'] }}
+      become: yes
+
+- hosts: tag_Role_SwarmManager
+  become: yes
+  roles:
+    - { role: swarm, tags: [ 'swarm' ] }

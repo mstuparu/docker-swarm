@@ -1,0 +1,9 @@
+---
+- name: Add docker repository
+  copy: src=docker.repo dest=/etc/yum.repos.d/docker.repo
+
+- name: Install docker daemon
+  yum: name=docker-engine state=present
+
+- name: Startup docker and enable at startup
+  service: name=docker state=started enabled=yes

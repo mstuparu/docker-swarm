@@ -1,0 +1,7 @@
+---
+- hosts: tag_Name_ec2_swarm_01
+  become: yes
+  tasks:
+    - shell: "{{ swarm_action }}"
+      run_once: true
+      changed_when: false
